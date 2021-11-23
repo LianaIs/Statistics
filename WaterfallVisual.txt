@@ -1,0 +1,212 @@
+https://codepen.io/pen/
+
+
+<!-- Styles -->
+<style>
+
+#chartdiv {
+  width: 100%;
+  height: 500px
+}
+</style>
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<!-- Chart code -->
+<script>
+
+  </script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
+
+
+am5.ready(function() {
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("chartdiv");
+
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var chart = root.container.children.push(am5xy.XYChart.new(root, {
+  panX: false,
+  panY: false
+}));
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var xRenderer = am5xy.AxisRendererX.new(root, { minGridDistance: 30 });
+
+var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+  maxDeviation: 0,
+  categoryField: "category",
+  renderer: xRenderer,
+  tooltip: am5.Tooltip.new(root, {})
+}));
+
+var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+  maxDeviation: 0,
+  min: -1,
+  renderer: am5xy.AxisRendererY.new(root, {}),
+  tooltip: am5.Tooltip.new(root, {})
+}));
+
+// Add cursor
+// https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
+  xAxis:xAxis,
+  yAxis:yAxis
+}));
+
+// Create series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "value",
+  openValueYField: "open",
+  categoryXField: "category"
+}));
+
+series.columns.template.setAll({
+  templateField: "columnConfig",
+  strokeOpacity: 0
+})
+
+series.bullets.push(function() {
+  return am5.Bullet.new(root, {
+    sprite: am5.Label.new(root, {
+      text: "{displayValue}%",
+      centerY: am5.p50,
+      centerX: am5.p50,
+      populateText: true
+    })
+  });
+});
+
+
+var stepSeries = chart.series.push(am5xy.StepLineSeries.new(root, {
+  xAxis: xAxis,
+  yAxis: yAxis,
+  valueYField: "stepValue",
+  categoryXField: "category",
+  noRisers: true,
+  locationX: 0.65,
+  stroke: root.interfaceColors.get("alternativeBackground")
+}));
+
+stepSeries.strokes.template.setAll({
+  strokeDasharray: [3, 3]
+})
+
+var colorSet = am5.ColorSet.new(root, {});
+
+// Set data
+var data = [ {
+  category: "Agriculture",
+  value: 0 -0.2,
+  open: 0,
+  stepValue: 0 -0.2,
+  columnConfig: {
+    fill: colorSet.getIndex(8),
+  },
+  displayValue: -0.2
+}, {
+  category: "Manufacturing",
+  value: 0 - 0.2 - 0.29,
+  open: 0 - 0.2,
+  stepValue: 0 - 0.2 - 0.29,
+  columnConfig: {
+    fill: colorSet.getIndex(9),
+  },
+  displayValue: -0.29
+}, {
+  category: "Construction",
+  value: 0 - 0.2 - 0.29 + 0.09,
+  open: 0 - 0.2 - 0.29,
+  stepValue: 0 - 0.2 - 0.29 + 0.09,
+  columnConfig: {
+    fill: colorSet.getIndex(10),
+  },
+  displayValue: 0.09
+}, {
+  category: "HoReCa",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31,
+  open: 0 - 0.2 - 0.29 + 0.09,
+  stepValue: 0 - 0.2 - 0.29 + 0.09 + 1.31,
+  columnConfig: {
+    fill: colorSet.getIndex(16),
+  },
+  displayValue: 1.31
+},
+            {
+  category: "Real Estate",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24,
+  open: 0 - 0.2 - 0.29 + 0.09 + 1.31,
+  stepValue: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24,
+  columnConfig: {
+    fill: colorSet.getIndex(16),
+  },
+  displayValue: 1.24
+},
+            {
+  category: "Healthcare",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32,
+  open: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24,
+  stepValue: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32,
+  columnConfig: {
+    fill: colorSet.getIndex(16),
+  },
+  displayValue: 1.32
+},
+             {
+  category: "Arts-Entert.",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16,
+  open: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32,
+  stepValue: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16,
+  columnConfig: {
+    fill: colorSet.getIndex(16),
+  },
+  displayValue: -2.2
+},
+             {
+  category: "Other",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16 + 2.7,
+  open: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16,
+  stepValue: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16 +2.7,
+  columnConfig: {
+    fill: colorSet.getIndex(16),
+  },
+  displayValue: 2.72
+},{
+  category: "Growth",
+  value: 0 - 0.2 - 0.29 + 0.09 + 1.31 + 1.24 +1.32 -2.16 +2.7,
+  open: 0,
+  columnConfig: {
+    fill: colorSet.getIndex(17),
+  },
+  displayValue: 4.0
+}];
+
+xAxis.data.setAll(data);
+series.data.setAll(data);
+stepSeries.data.setAll(data);
+
+
+// Make stuff animate on load
+// https://www.amcharts.com/docs/v5/concepts/animations/
+series.appear(1000);
+chart.appear(1000, 100);
+
+}); // end am5.ready()
